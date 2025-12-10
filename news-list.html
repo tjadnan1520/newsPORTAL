@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News - News Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <h1>📰 News Portal</h1>
+            <div class="header-actions">
+                <div class="user-info">
+                    <span id="userInfo"></span>
+                </div>
+                <div class="nav-buttons">
+                    <a href="create-news.html" class="btn btn-primary btn-small">➕ New Post</a>
+                    <button onclick="logout()" class="btn btn-secondary btn-small">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Search news by title...">
+        </div>
+
+        <div class="feed" id="newsContainer">
+            <p class="loading">Loading news...</p>
+        </div>
+    </div>
+    <script src="app.js"></script>
+    <script>
+        checkAuth();
+        const currentUser = getCurrentUser();
+        document.getElementById('userInfo').textContent = currentUser.name;
+
+        let allNews = [];
+
+        async function loadNews() {
+            try {
+                const response = await fetch('http://localhost:3000/news');
+                allNews = await response.json();
+                displayNews(allNews);
+            } catch (error) {
+                console.error('Error loading news:', error);
+                document.getElementById('newsContainer').innerHTML = '<div class="empty-state"><div class="empty-state-icon">⚠️</div><div class="empty-state-text">Failed to load news</div></div>';
+            }
+        }
+
+        async function displayNews(newsList) {
+            const container = document.getElementById('newsContainer');
+            
+            if (newsList.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📰</div><div class="empty-state-text">No news found</div></div>';
+                return;
+            }
+
+            // Fetch all users for author names
+            const usersResponse = await fetch('http://localhost:3000/users');
+            const users = await usersResponse.json();
+
+            container.innerHTML = '';
+            
+            for (const news of newsList) {
+                const author = users.find(u => u.id === news.author_id);
+                const commentCount = news.comments ? news.comments.length : 0;
+                
+                const card = document.createElement('div');
+                card.className = 'news-card';
+                card.innerHTML = `
+                    <div class="news-card-header">
+                        <div class="news-card-title">${escapeHtml(news.title)}</div>
+                        <div class="news-card-meta">By ${author ? author.name : 'Unknown'}</div>
+                    </div>
+                    <div class="news-card-body">
+                        <div class="news-card-preview">${escapeHtml(news.body.substring(0, 200))}</div>
+                    </div>
+                    <div class="news-card-footer">
+                        <div class="comments-count">💬 ${commentCount}</div>
+                        <div class="news-card-actions">
+                            <a href="news-detail.html?id=${news.id}" class="btn btn-small">View</a>
+                            ${news.author_id === currentUser.id ? `
+                                <a href="edit-news.html?id=${news.id}" class="btn btn-small">Edit</a>
+                                <button onclick="deleteNews(${news.id})" class="btn btn-small btn-danger">Delete</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            }
+        }
+
+        async function deleteNews(id) {
+            if (!confirm('Delete this post?')) return;
+
+            try {
+                await fetch(`http://localhost:3000/news/${id}`, {
+                    method: 'DELETE'
+                });
+                loadNews();
+            } catch (error) {
+                console.error('Error deleting news:', error);
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = allNews.filter(news => 
+                news.title.toLowerCase().includes(searchTerm)
+            );
+            displayNews(filtered);
+        });
+
+        loadNews();
+    </script>
+</body>
+</html>
