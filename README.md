@@ -35,9 +35,9 @@ Or open the `index.html` file directly in your browser while the server is runni
 
 ## Available Users
 The application comes with pre-configured test users:
-- Alice Rahman (alice@example.com)
-- Karim Hossain (karim@example.com)
-- Nusrat Jahan (nusrat@example.com)
+- Tarek (adnan@example.com)
+- Jamil (jamil@example.com)
+- Adnan (adnan@example.com)
 
 ## Project Structure
 - `index.html` - Landing page (redirects to login or news list)
