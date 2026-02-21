@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - News Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <h1>📰 News Portal</h1>
+            <h2 id="formTitle">Login</h2>
+            <div id="errorMsg" class="error-message"></div>
+
+            <!-- Login Form -->
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Login</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" style="display:none;">
+                <div class="form-group">
+                    <label for="regName">Name</label>
+                    <input type="text" id="regName" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">Email</label>
+                    <input type="email" id="regEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" placeholder="Min 6 characters" required minlength="6">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:100%;">Register</button>
+            </form>
+
+            <p style="text-align:center; margin-top:16px; font-size:14px;">
+                <span id="toggleText">Don't have an account?</span>
+                <a href="#" id="toggleLink" style="color:#000; font-weight:600;">Register</a>
+            </p>
+        </div>
+    </div>
+    <script src="app.js"></script>
+    <script>
+        // Redirect if already logged in
+        if (getToken()) {
+            window.location.href = 'news-list.html';
+        }
+
+        let isLogin = true;
+
+        document.getElementById('toggleLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            isLogin = !isLogin;
+            document.getElementById('loginForm').style.display = isLogin ? 'block' : 'none';
+            document.getElementById('registerForm').style.display = isLogin ? 'none' : 'block';
+            document.getElementById('formTitle').textContent = isLogin ? 'Login' : 'Register';
+            document.getElementById('toggleText').textContent = isLogin ? "Don't have an account?" : 'Already have an account?';
+            document.getElementById('toggleLink').textContent = isLogin ? 'Register' : 'Login';
+            document.getElementById('errorMsg').style.display = 'none';
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    showError(data.message || 'Login failed');
+                    return;
+                }
+
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('currentUser', JSON.stringify(data.user));
+                window.location.href = 'news-list.html';
+            } catch (error) {
+                console.error('Login error:', error);
+                showError('Failed to connect to server. Make sure the backend is running.');
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+
+            try {
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    const msg = data.errors ? data.errors.map(e => e.message).join(', ') : data.message;
+                    showError(msg || 'Registration failed');
+                    return;
+                }
+
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('currentUser', JSON.stringify(data.user));
+                window.location.href = 'news-list.html';
+            } catch (error) {
+                console.error('Register error:', error);
+                showError('Failed to connect to server. Make sure the backend is running.');
+            }
+        });
+
+        function showError(msg) {
+            const el = document.getElementById('errorMsg');
+            el.textContent = msg;
+            el.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
