@@ -29,7 +29,7 @@ A full-stack news portal application with user authentication, news management, 
 ![Login Page](screenshots/login.png)
 
 ### News List
-![News List](screenshots/news-list.png)
+![News List](screenshots/newslist.png)
 
 ### News Detail with Comments
 ![News Detail](screenshots/image.png)
