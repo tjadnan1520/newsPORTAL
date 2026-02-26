@@ -13,7 +13,11 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/news', newsRoutes);
-app.use('/api/news/:newsId/comments', commentRoutes);
+
+// Comment routes - use Router with params
+const commentRouter = express.Router({ mergeParams: true });
+commentRouter.use('/', commentRoutes);
+app.use('/api/news/:newsId/comments', commentRouter);
 
 // Health check
 app.get('/api/health', (req, res) => {

@@ -14,7 +14,7 @@
                 <div class="user-info">
                     <span id="userInfo"></span>
                 </div>
-                <a href="news-list.html" class="btn btn-secondary btn-small">Back</a>
+                <a href="news-list" class="btn btn-secondary btn-small">Back</a>
             </div>
         </div>
     </div>
@@ -55,7 +55,7 @@
                 const response = await fetch(`${API_URL}/news/${newsId}`);
                 if (!response.ok) {
                     alert('Failed to load news.');
-                    window.location.href = 'news-list.html';
+                    window.location.href = 'news-list';
                     return;
                 }
                 const news = await response.json();
@@ -63,7 +63,7 @@
                 // Check if current user is the author
                 if (news.authorId !== currentUser.id) {
                     alert('You can only edit your own news!');
-                    window.location.href = 'news-list.html';
+                    window.location.href = 'news-list';
                     return;
                 }
 
@@ -73,7 +73,7 @@
             } catch (error) {
                 console.error('Error loading news:', error);
                 alert('Failed to load news.');
-                window.location.href = 'news-list.html';
+                window.location.href = 'news-list';
             }
         }
 
@@ -120,7 +120,7 @@
                 }
 
                 alert('News updated successfully!');
-                window.location.href = 'news-list.html';
+                window.location.href = 'news-list';
             } catch (error) {
                 console.error('Error updating news:', error);
                 alert('Failed to update news.');

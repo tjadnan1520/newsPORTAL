@@ -25,7 +25,7 @@ function authHeaders() {
 function checkAuth() {
     const token = getToken();
     if (!token) {
-        window.location.href = 'login.html';
+        window.location.href = 'login';
     }
 }
 
@@ -33,7 +33,7 @@ function checkAuth() {
 function logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('currentUser');
-    window.location.href = 'login.html';
+    window.location.href = 'login';
 }
 
 // HTML escape function to prevent XSS

@@ -15,7 +15,7 @@
                     <span id="userInfo"></span>
                 </div>
                 <div class="nav-buttons">
-                    <a href="create-news.html" class="btn btn-primary btn-small">➕ New Post</a>
+                    <a href="create-news" class="btn btn-primary btn-small">➕ New Post</a>
                     <button onclick="logout()" class="btn btn-secondary btn-small">Logout</button>
                 </div>
             </div>
@@ -78,9 +78,9 @@
                     <div class="news-card-footer">
                         <div class="comments-count">💬 ${commentCount}</div>
                         <div class="news-card-actions">
-                            <a href="news-detail.html?id=${news.id}" class="btn btn-small">View</a>
+                            <a href="news-detail?id=${news.id}" class="btn btn-small">View</a>
                             ${news.authorId === currentUser.id ? `
-                                <a href="edit-news.html?id=${news.id}" class="btn btn-small">Edit</a>
+                                <a href="edit-news?id=${news.id}" class="btn btn-small">Edit</a>
                                 <button onclick="deleteNews(${news.id})" class="btn btn-small btn-danger">Delete</button>
                             ` : ''}
                         </div>

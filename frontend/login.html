@@ -53,7 +53,7 @@
     <script>
         // Redirect if already logged in
         if (getToken()) {
-            window.location.href = 'news-list.html';
+            window.location.href = 'news-list';
         }
 
         let isLogin = true;
@@ -90,7 +90,7 @@
 
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('currentUser', JSON.stringify(data.user));
-                window.location.href = 'news-list.html';
+                window.location.href = 'news-list';
             } catch (error) {
                 console.error('Login error:', error);
                 showError('Failed to connect to server. Make sure the backend is running.');
@@ -120,7 +120,7 @@
 
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('currentUser', JSON.stringify(data.user));
-                window.location.href = 'news-list.html';
+                window.location.href = 'news-list';
             } catch (error) {
                 console.error('Register error:', error);
                 showError('Failed to connect to server. Make sure the backend is running.');
