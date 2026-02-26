@@ -32,7 +32,7 @@ A full-stack news portal application with user authentication, news management, 
 ![News List](screenshots/news-list.png)
 
 ### News Detail with Comments
-![News Detail](screenshots/news-detail.png)
+![News Detail](screenshots/image.png)
 
 ## 📦 Installation
 
@@ -94,61 +94,8 @@ The backend runs on **http://localhost:3000**
 
 The frontend runs on **http://localhost:5500**
 
-## 👥 Default Users
 
-| Name  | Email               | Password     |
-|-------|---------------------|--------------|
-| Tarek | tarek@example.com   | password123  |
-| Jamil | jamil@example.com   | password123  |
-| Adnan | adnan@example.com   | password123  |
 
-## 📁 Project Structure
-
-```
-newsPORTAL/
-├── backend/
-│   ├── src/
-│   │   ├── app.js
-│   │   ├── server.js
-│   │   ├── config/
-│   │   ├── controllers/
-│   │   ├── middleware/
-│   │   ├── routes/
-│   │   └── validators/
-│   ├── prisma/
-│   │   ├── schema.prisma
-│   │   ├── seed.js
-│   │   └── migrations/
-│   └── package.json
-├── frontend/
-│   ├── index.html
-│   ├── login.html
-│   ├── news-list.html
-│   ├── news-detail.html
-│   ├── create-news.html
-│   ├── edit-news.html
-│   ├── styles.css
-│   ├── app.js
-│   └── package.json
-└── README.md
-```
-
-## 🔗 API Endpoints
-
-### Authentication
-- `POST /api/auth/register` - Register a new user
-- `POST /api/auth/login` - Login user
-
-### News
-- `GET /api/news` - Get all news
-- `GET /api/news/:id` - Get single news
-- `POST /api/news` - Create news (auth required)
-- `PUT /api/news/:id` - Update news (auth required)
-- `DELETE /api/news/:id` - Delete news (auth required)
-
-### Comments
-- `GET /api/comments/news/:newsId` - Get comments for a news article
-- `POST /api/comments` - Add comment (auth required)
 
 ## 📄 License
 
